@@ -168,7 +168,43 @@ def main():
     if os.path.exists('results/text_image_samples.png'):
         doc.add_picture('results/text_image_samples.png', width=Inches(6))
 
-    add_heading(doc, '3.4 Insight Utama', level=2)
+    add_heading(doc, '3.4 ANALISIS PERBANDINGAN RETRIEVAL (SESUAI VS TIDAK SESUAI)', level=2)
+    doc.add_paragraph("Berikut adalah analisis perbandingan langsung beserta contoh visual gambar dari hasil pencarian (retrieval) yang memiliki tingkat kemiripan paling sesuai dan paling tidak sesuai/ambigu.")
+
+    add_paragraph(doc, "A. Hasil Pencarian Sangat Sesuai (High Similarity)", bold=True)
+    if os.path.exists('results/retrieval_success_1.png'):
+        doc.add_picture('results/retrieval_success_1.png', width=Inches(6))
+    doc.add_paragraph("Analisis: Pada query 'formal black leather shoes', gambar yang muncul secara akurat merepresentasikan atribut tekstual. Model embedding CLIP memetakan deskripsi warna ('black') dan bentuk ('formal leather') ke ciri-ciri piksel sepatu pantofel hitam secara seragam.")
+
+    add_paragraph(doc, "B. Hasil Pencarian Tidak Sesuai / Ambigu (Low Similarity)", bold=True)
+    if os.path.exists('results/retrieval_failure_2.png'):
+        doc.add_picture('results/retrieval_failure_2.png', width=Inches(6))
+    doc.add_paragraph("Analisis: Pada query 'comfortable lightweight walking', sistem memunculkan model acak (flat shoes, pantofel). Kata kunci 'comfortable' dan 'lightweight' bersifat konseptual dan bukan visual (Semantic Gap). Tanpa adanya warna/bentuk spesifik pada teks, sistem gagal menebak secara visual.")
+
+    doc.add_paragraph("Tabel Perbandingan Karakteristik:")
+    table_comp = doc.add_table(rows=1, cols=3)
+    table_comp.style = 'Table Grid'
+    hdr_cells = table_comp.rows[0].cells
+    hdr_cells[0].text = 'Karakteristik'
+    hdr_cells[1].text = 'Query Sesuai'
+    hdr_cells[2].text = 'Query Tidak Sesuai'
+
+    row_cells = table_comp.add_row().cells
+    row_cells[0].text = 'Contoh'
+    row_cells[1].text = 'formal black leather shoes'
+    row_cells[2].text = 'comfortable lightweight walking'
+
+    row_cells = table_comp.add_row().cells
+    row_cells[0].text = 'Image-Text Align'
+    row_cells[1].text = 'Tinggi (Fitur eksplisit)'
+    row_cells[2].text = 'Rendah (Fitur konseptual)'
+
+    row_cells = table_comp.add_row().cells
+    row_cells[0].text = 'Top-K Hasil'
+    row_cells[1].text = 'Seragam / Konsisten'
+    row_cells[2].text = 'Acak / Bias'
+
+    add_heading(doc, '3.5 Insight Utama', level=2)
     doc.add_paragraph(
         "Berdasarkan proses EDA, berikut adalah 3 insight utama:\n"
         "1. Teks Terlalu Umum: Mayoritas teks hanya merupakan struktur 'Brand + Model'. Tidak banyak atribut visual spesifik (seperti 'hitam', 'sol karet', atau 'kulit') yang dideskripsikan dengan detail.\n"
@@ -202,20 +238,50 @@ def main():
 
     add_heading(doc, '5.1 Representasi Teks', level=2)
     doc.add_paragraph(
-        "Representasi sparse seperti TF-IDF memetakan setiap kata dalam kosakata (vocabulary) ke sebuah dimensi, menghasilkan vektor raksasa yang sebagian besar nilainya adalah nol. "
-        "Sebaliknya, Embedding (Dense) memampatkan makna teks ke dalam vektor berukuran padat (misal 512 dimensi). Embedding dapat merepresentasikan sinonim, sedangkan TF-IDF tidak."
+        "Untuk memahami perbedaan mendasar, berikut adalah perbandingan nyata antara TF-IDF (Sparse) dan Embedding (Dense) menggunakan contoh teks deskripsi dari dataset."
     )
+
+    table_rep = doc.add_table(rows=1, cols=3)
+    table_rep.style = 'Table Grid'
+    hdr_cells = table_rep.rows[0].cells
+    hdr_cells[0].text = 'Aspek / Metode'
+    hdr_cells[1].text = 'TF-IDF (Sparse Representation)'
+    hdr_cells[2].text = 'Embedding (Dense Representation)'
+
+    row_cells = table_rep.add_row().cells
+    row_cells[0].text = 'Konsep Dasar'
+    row_cells[1].text = 'Menghitung statistik frekuensi kemunculan kata eksak dalam dokumen.'
+    row_cells[2].text = 'Mengubah teks menjadi ruang vektor kontinu yang merepresentasikan makna (semantic space).'
+
+    row_cells = table_rep.add_row().cells
+    row_cells[0].text = 'Bentuk Vektor (Contoh: "black shoes")'
+    row_cells[1].text = '[0, 0, 0, 0.45, 0, 0, 0.81, 0, ...]\nPanjang vektor seukuran total kosa kata (bisa 10.000 dimensi). Mayoritas nilainya 0.'
+    row_cells[2].text = '[-0.012, 0.431, -0.992, 0.111, ...]\nPanjang vektor padat (misal 512 dimensi). Semua elemen berisikan angka desimal.'
+
+    row_cells = table_rep.add_row().cells
+    row_cells[0].text = 'Kelemahan & Kelebihan'
+    row_cells[1].text = 'Tidak memahami konteks atau sinonim (kata "sneakers" dan "shoes" dianggap berbeda sama sekali). Ringan secara komputasi.'
+    row_cells[2].text = 'Mampu memahami sinonim dan konteks (vektor "sneakers" dan "shoes" akan berdekatan secara matematis). Membutuhkan model neural network.'
 
     add_heading(doc, '5.2 Representasi Citra', level=2)
     doc.add_paragraph(
-        "Citra mentah berupa piksel diproses melalui arsitektur CNN (seperti ResNet) atau Vision Transformer (ViT). Model ini mengekstrak pola visual dasar (seperti garis, warna) hingga konsep makro tingkat tinggi (seperti bentuk sepatu), "
-        "yang pada akhirnya dikompresi menjadi vektor fitur (image embedding) berukuran 512 dimensi."
+        "Sama halnya dengan teks, citra (gambar) mentah tidak bisa langsung dibandingkan oleh mesin. Alurnya adalah: Citra Mentah → Ekstraksi Fitur → Vektor Dense."
     )
+    doc.add_paragraph(
+        "Sistem menggunakan arsitektur CNN (Convolutional Neural Network) atau ViT (Vision Transformer) sebagai 'Image Encoder'. Secara hierarkis, CNN bekerja sebagai berikut:"
+    )
+    doc.add_paragraph(
+        "- Lapisan awal (Early layers) mengenali pola visual primitif seperti garis tepi (edges) atau gradien warna.\n"
+        "- Lapisan menengah (Middle layers) menggabungkan garis-garis tersebut menjadi tekstur atau bentuk parsial (seperti pola tali sepatu atau corak sol).\n"
+        "- Lapisan akhir (Deep layers) memahami konsep makro (bahwa kumpulan bentuk tersebut adalah utuhan sebuah 'sepatu')."
+    )
+    doc.add_paragraph("Hasil akhirnya, seluruh informasi piksel di-kompresi menjadi vektor fitur satu dimensi berukuran padat (misal 512-dimensi) yang merepresentasikan objek secara numerik.")
 
     add_heading(doc, '5.3 Tantangan Multimodal', level=2)
     doc.add_paragraph(
-        "Tantangan terbesarnya adalah 'Semantic Gap', yaitu perbedaan struktur data antara rentetan karakter (teks) dengan matriks piksel RGB (gambar). "
-        "Model harus diajarkan bagaimana agar teks 'merah' memiliki representasi vektor yang identik dengan piksel warna merah."
+        "Menggabungkan dua modalitas (teks dan gambar) memunculkan tantangan fundamental yaitu:\n"
+        "1. Perbedaan Struktur Data: Teks direpresentasikan sebagai rentetan sekuensial karakter diskrit (NLP), sedangkan gambar direpresentasikan sebagai matriks spasial intensitas warna RGB (Computer Vision). Menyelaraskan dua ruang komputasi yang berbeda ini sangat rumit.\n"
+        "2. Gap Semantik (Semantic Gap): Manusia dengan mudah memahami bahwa gambar sepasang sepatu berwarna merah maknanya sama dengan kata 'red shoes'. Namun bagi mesin, menjembatani hubungan antara rentetan piksel bernilai [255, 0, 0] dengan rentetan string teks 'r-e-d' merupakan gap semantik yang sangat jauh. Solusinya adalah melatih model untuk memproyeksikan vektor dari teks dan vektor dari gambar ke dalam satu joint embedding space yang sama."
     )
 
     # --- BAB 6 ---
@@ -262,44 +328,7 @@ def main():
     )
 
     # --- BAB 7 ---
-    add_heading(doc, '7. ANALISIS PERBANDINGAN RETRIEVAL (SESUAI VS TIDAK SESUAI)', level=1)
-    doc.add_paragraph("Pada bab ini, dilakukan analisis perbandingan langsung terhadap hasil pencarian (retrieval) yang memiliki skor kemiripan (cosine similarity) paling tinggi (sangat sesuai) dan skor kemiripan paling rendah (sangat tidak sesuai) berdasarkan pengujian query menggunakan model CLIP.")
-
-    # 7.1 Sesuai
-    add_heading(doc, '7.1 Hasil Retrieval Sangat Sesuai (High Similarity)', level=2)
-    doc.add_paragraph("Pada query 'formal black leather shoes', sistem memunculkan gambar dengan tingkat kemiripan (score) tertinggi di atas 0.31.")
-    doc.add_paragraph("Analisis: Gambar yang muncul benar-benar merepresentasikan sepatu pantofel berwarna hitam. Teks asli dari produk tersebut juga memiliki komponen semantik yang kuat (misal: 'Mens Oxford Shoes Black'). Hal ini membuktikan bahwa jika deskripsi visual pada query sangat jelas, model CLIP mampu memetakan kedekatan warna ('black') dan bentuk ('formal leather') dengan sangat akurat secara visual.")
-
-    # 7.2 Tidak Sesuai
-    add_heading(doc, '7.2 Hasil Retrieval Tidak Sesuai / Ambigu (Low/Confusing Similarity)', level=2)
-    doc.add_paragraph("Pada query 'comfortable lightweight walking', sistem memunculkan gambar dengan skor yang relatif jauh lebih rendah dan variasi gambar yang acak.")
-    doc.add_paragraph("Analisis: Kata kunci abstrak seperti 'comfortable' (nyaman) dan 'lightweight' (ringan) adalah kata sifat fungsional, bukan kata sifat visual. Model berbasis vision-language kesulitan menemukan representasi piksel dari kata 'nyaman'. Akibatnya, sistem hanya menebak berdasarkan bias data latihannya (mungkin mengaitkan sepatu lari acak dengan kata walking). Ini membuktikan kelemahan mendasar dari sistem ini jika tidak dikawinkan dengan metadata fungsional.")
-
-    # 7.3 Tabel perbandingan
-    add_heading(doc, '7.3 Tabel Perbandingan Karakteristik Query', level=2)
-    table_comp = doc.add_table(rows=1, cols=3)
-    table_comp.style = 'Table Grid'
-    hdr_cells = table_comp.rows[0].cells
-    hdr_cells[0].text = 'Karakteristik'
-    hdr_cells[1].text = 'Query Visual Eksplisit (Sesuai)'
-    hdr_cells[2].text = 'Query Konseptual Abstrak (Tidak Sesuai)'
-
-    row_cells = table_comp.add_row().cells
-    row_cells[0].text = 'Contoh Query'
-    row_cells[1].text = '"red running sneakers", "formal black leather shoes"'
-    row_cells[2].text = '"comfortable lightweight walking", "good quality shoes"'
-
-    row_cells = table_comp.add_row().cells
-    row_cells[0].text = 'Kesesuaian Fitur (Image-Text Align)'
-    row_cells[1].text = 'Tinggi. Warna dan bentuk mudah di-encode oleh CNN/ViT.'
-    row_cells[2].text = 'Rendah. Kenyamanan tidak bisa dilihat langsung dari piksel murni.'
-
-    row_cells = table_comp.add_row().cells
-    row_cells[0].text = 'Distribusi Hasil Top-K'
-    row_cells[1].text = 'Seragam (seluruh top 5 memiliki ciri visual yang identik secara kasat mata).'
-    row_cells[2].text = 'Acak (sepatu boots, sandal, dan sneakers bercampur).'
-
-    add_heading(doc, '8. RENCANA IMPLEMENTASI', level=1)
+    add_heading(doc, '7. RENCANA IMPLEMENTASI', level=1)
 
     add_heading(doc, '7.1 Tools & Library', level=2)
     doc.add_paragraph("Python, PyTorch (Torchvision), HuggingFace Sentence-Transformers, Pandas, Matplotlib, PIL (Pillow), dan Gradio (untuk UI).")
@@ -351,7 +380,7 @@ def main():
     )
 
     # --- BAB 8 ---
-    add_heading(doc, '9. ANALISIS POTENSI MASALAH', level=1)
+    add_heading(doc, '8. ANALISIS POTENSI MASALAH', level=1)
     doc.add_paragraph(
         "- Misalignment teks-gambar: Teks produk sering tidak selaras dengan foto. Sebuah gambar sepatu lari putih bisa dideskripsikan sebagai 'Running Shoes' tanpa menyebut warnanya.\n"
         "- Bias Dataset: Produk di dataset e-commerce sering kali di-shoot pada latar putih dengan pencahayaan sempurna. Jika model CLIP dipakai di domain foto in-the-wild (sepatu yang sedang dipakai berjalan di lumpur), model akan gagal atau skornya jatuh.\n"
@@ -359,7 +388,7 @@ def main():
     )
 
     # --- BAB 9 ---
-    add_heading(doc, '10. KESIMPULAN', level=1)
+    add_heading(doc, '9. KESIMPULAN', level=1)
     doc.add_paragraph(
         "Pendekatan multimodal text-to-image retrieval menggunakan model berbasis CLIP terbukti sangat mumpuni dalam memecahkan limitasi algoritma keyword-based. "
         "Sistem dapat menautkan query natural language manusia langsung ke representasi visual tanpa bergantung pada kehadiran teks deskriptif di produk tersebut. "
@@ -368,7 +397,7 @@ def main():
     )
 
     # --- BAB 10 ---
-    add_heading(doc, '11. DAFTAR PUSTAKA', level=1)
+    add_heading(doc, '10. DAFTAR PUSTAKA', level=1)
     doc.add_paragraph(
         "1. Manning, C. D., Raghavan, P., & Schütze, H. (2008). Introduction to Information Retrieval. Cambridge University Press.\n"
         "2. Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep Learning. MIT Press.\n"
