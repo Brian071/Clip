@@ -1,0 +1,27 @@
+Query (success_1): formal black leather shoes
+  Rank 1 [Score: 0.3382] - Amazon Brand - Symbol Men's Black Formal Derby Shoes - 11 UK/India (45 EU)(AZ-KY-110A)
+  Rank 2 [Score: 0.3378] - Amazon Brand - Symbol Men's Derby leather formal shoes - 6 UK/India (40 EU)(AZ-WS-114A)
+  Rank 3 [Score: 0.3364] - Amazon Brand - Symbol Men's Black Leather Formal Shoes - 10 UK (AZ-OM-233A)
+  Rank 4 [Score: 0.3330] - Klepe Men's Black White Running Shoes-8 UK (42 EU) (9 US) (KP801/BLKWHT)
+  Rank 5 [Score: 0.3293] - Amazon Brand - Symbol Men's Black Leather Formal Shoes - 8 UK (AZ-ST-356A)
+
+Query (success_2): red running sneakers
+  Rank 1 [Score: 0.3158] - Bourge Men's Red and White Running Shoes-6 UK (40 EU) (7 US) (Reef-35)
+  Rank 2 [Score: 0.3072] - Solefit Men's RED Running Shoes-9 UK (42 EU) (SLFT-1134)
+  Rank 3 [Score: 0.3047] - Fusefit Women's Alpinia Fushia Running Shoes-7 UK (40 EU) (8 US) (FFR-453)
+  Rank 4 [Score: 0.3022] - Concept 3 by Skechers - Zapatillas de Malla con Cordones para Hombre, Negro/Rojo, 12
+  Rank 5 [Score: 0.3011] - Amazon Brand - Symbol പുരുഷന്മാരുടെ പോളിസ്റ്റർ സ്നീക്കറുകൾ - ചുവപ്പ് - 8 uk
+
+Query (failure_1): black shoes
+  Rank 1 [Score: 0.2971] - Klepe Men's Black White Running Shoes-8 UK (42 EU) (9 US) (KP801/BLKWHT)
+  Rank 2 [Score: 0.2888] - Amazon Brand - Symbol Men's Black Formal Derby Shoes - 11 UK/India (45 EU)(AZ-KY-110A)
+  Rank 3 [Score: 0.2880] - Amazon Brand - Symbol Men's Black Leather Formal Shoes - 8 UK (AZ-ST-356A)
+  Rank 4 [Score: 0.2880] - Amazon Brand - Symbol Men's Black Leather Formal Shoes - 10 UK (AZ-OM-233A)
+  Rank 5 [Score: 0.2879] - Amazon Brand - Symbol Men's Derby leather formal shoes - 6 UK/India (40 EU)(AZ-WS-114A)
+
+Query (failure_2): comfortable lightweight walking
+  Rank 1 [Score: 0.3064] - Concept 3 by Skechers Beyond Fresh Zapatillas de Moda con Cordones para Mujer, Blanco/Plateado, 6
+  Rank 2 [Score: 0.3064] - Concept 3 by Skechers Beyond Fresh Zapatillas de Moda con Cordones para Mujer, Blanco/Plateado, 10.5
+  Rank 3 [Score: 0.3060] - Bourge Men's Red and Grey Floaters-9 UK (43 EU) (10 US) (Grada-28)
+  Rank 4 [Score: 0.3027] - Klepe Men's Running Shoes-9 UK (43 EU) (10 US) (BX035/BLK)
+  Rank 5 [Score: 0.3021] - Concept 3 by Skechers Beyond Fresh Zapatillas de Moda con Cordones para Mujer, Blanco/Dorado, 11

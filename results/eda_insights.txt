@@ -1,0 +1,9 @@
+=== Insight EDA Dataset ABO (Kategori: SHOES) ===
+Total Data: 760
+Rata-rata panjang teks deskripsi: 10.50 kata
+Top 5 kata dominan: amazon, men's, brand, find., women's
+
+Insight Tambahan:
+1. Teks Terlalu Umum: Banyak deskripsi yang hanya mencantumkan brand atau nama tipe secara general tanpa mendeskripsikan ciri visual sepatu (misal: warna, bentuk).
+2. Banyak Mismatch: Teks memiliki istilah kompleks ('breathable', 'lightweight') yang tidak selalu bisa ditangkap secara visual oleh citra produk yang beresolusi kecil.
+3. Variasi Citra: Beberapa gambar memiliki background putih (katalog murni) sementara beberapa lainnya memperlihatkan produk dari sudut (angle) yang tidak biasa.
