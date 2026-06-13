@@ -94,17 +94,59 @@ def main():
     )
 
     add_heading(doc, '2.3 Struktur Data', level=2)
-    doc.add_paragraph("Struktur data akhir setelah tahap preprocessing (shoes_dataset.csv) adalah sebagai berikut:")
-    doc.add_paragraph("| id | local_image_path | text | category |")
+    doc.add_paragraph("Struktur data akhir setelah tahap preprocessing (shoes_dataset.csv) terdiri dari 4 kolom utama sebagai berikut:")
+
+    table_struktur = doc.add_table(rows=1, cols=3)
+    table_struktur.style = 'Table Grid'
+    hdr_cells = table_struktur.rows[0].cells
+    hdr_cells[0].text = 'Nama Kolom'
+    hdr_cells[1].text = 'Tipe Data'
+    hdr_cells[2].text = 'Deskripsi'
+
+    row_cells = table_struktur.add_row().cells
+    row_cells[0].text = 'id'
+    row_cells[1].text = 'String'
+    row_cells[2].text = 'Identifier unik untuk setiap item di dataset ABO.'
+
+    row_cells = table_struktur.add_row().cells
+    row_cells[0].text = 'local_image_path'
+    row_cells[1].text = 'String'
+    row_cells[2].text = 'Path lokal menuju gambar (.jpg) produk yang telah diunduh.'
+
+    row_cells = table_struktur.add_row().cells
+    row_cells[0].text = 'text'
+    row_cells[1].text = 'String'
+    row_cells[2].text = 'Deskripsi tekstual atau nama produk.'
+
+    row_cells = table_struktur.add_row().cells
+    row_cells[0].text = 'category'
+    row_cells[1].text = 'String'
+    row_cells[2].text = 'Kategori produk (bernilai konstan "SHOES").'
 
     add_heading(doc, '2.4 Kualitas Data', level=2)
-    doc.add_paragraph(
-        "Dari observasi kualitas data, beberapa catatan penting ditemukan:\n"
-        "- Missing Data: Beberapa id pada listings ABO tidak memiliki image_id utama atau gagal diunduh dari S3. Data tersebut telah didrop pada preprocessing.\n"
-        "- Inkonsistensi Teks-Visual: Beberapa teks deskripsi hanya berisi nama merek (misal: 'Nike Air Max') tanpa mendeskripsikan ciri visual (seperti warna atau bentuk). "
-        "Hal ini berpotensi menyebabkan ketidakcocokan dalam retrieval jika hanya bergantung pada kedekatan semantik visual.\n"
-        "- Duplikasi: Pada produk yang memiliki banyak varian ukuran, deskripsi teksnya identik meskipun gambarnya mungkin mewakili produk yang sama persis."
-    )
+    doc.add_paragraph("Berdasarkan observasi dari 760 sampel dataset, berikut adalah rangkuman analisis kualitas data:")
+
+    table_kualitas = doc.add_table(rows=1, cols=3)
+    table_kualitas.style = 'Table Grid'
+    hdr_cells = table_kualitas.rows[0].cells
+    hdr_cells[0].text = 'Metrik Kualitas'
+    hdr_cells[1].text = 'Status / Temuan'
+    hdr_cells[2].text = 'Tindakan (Action)'
+
+    row_cells = table_kualitas.add_row().cells
+    row_cells[0].text = 'Missing Data'
+    row_cells[1].text = 'Terdapat beberapa item pada metadata ABO yang tidak memiliki link gambar valid atau gagal diunduh.'
+    row_cells[2].text = 'Item dengan missing images dihapus (dropped) selama preprocessing.'
+
+    row_cells = table_kualitas.add_row().cells
+    row_cells[0].text = 'Inkonsistensi Teks-Visual'
+    row_cells[1].text = 'Sebagian teks hanya memuat nama merek tanpa detail warna/bentuk visual.'
+    row_cells[2].text = 'Dipertahankan sebagai data uji kasus kegagalan (Semantic Gap Analysis).'
+
+    row_cells = table_kualitas.add_row().cells
+    row_cells[0].text = 'Duplikasi Data'
+    row_cells[1].text = 'Ditemukan deskripsi teks yang identik untuk beberapa id karena varian ukuran produk.'
+    row_cells[2].text = 'Dibiarkan karena setiap id merupakan item listing terpisah dengan gambar berpotensi mirip.'
 
     # --- BAB 3 ---
     add_heading(doc, '3. EXPLORATORY DATA ANALYSIS (EDA)', level=1)
