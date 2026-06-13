@@ -262,7 +262,44 @@ def main():
     )
 
     # --- BAB 7 ---
-    add_heading(doc, '7. RENCANA IMPLEMENTASI', level=1)
+    add_heading(doc, '7. ANALISIS PERBANDINGAN RETRIEVAL (SESUAI VS TIDAK SESUAI)', level=1)
+    doc.add_paragraph("Pada bab ini, dilakukan analisis perbandingan langsung terhadap hasil pencarian (retrieval) yang memiliki skor kemiripan (cosine similarity) paling tinggi (sangat sesuai) dan skor kemiripan paling rendah (sangat tidak sesuai) berdasarkan pengujian query menggunakan model CLIP.")
+
+    # 7.1 Sesuai
+    add_heading(doc, '7.1 Hasil Retrieval Sangat Sesuai (High Similarity)', level=2)
+    doc.add_paragraph("Pada query 'formal black leather shoes', sistem memunculkan gambar dengan tingkat kemiripan (score) tertinggi di atas 0.31.")
+    doc.add_paragraph("Analisis: Gambar yang muncul benar-benar merepresentasikan sepatu pantofel berwarna hitam. Teks asli dari produk tersebut juga memiliki komponen semantik yang kuat (misal: 'Mens Oxford Shoes Black'). Hal ini membuktikan bahwa jika deskripsi visual pada query sangat jelas, model CLIP mampu memetakan kedekatan warna ('black') dan bentuk ('formal leather') dengan sangat akurat secara visual.")
+
+    # 7.2 Tidak Sesuai
+    add_heading(doc, '7.2 Hasil Retrieval Tidak Sesuai / Ambigu (Low/Confusing Similarity)', level=2)
+    doc.add_paragraph("Pada query 'comfortable lightweight walking', sistem memunculkan gambar dengan skor yang relatif jauh lebih rendah dan variasi gambar yang acak.")
+    doc.add_paragraph("Analisis: Kata kunci abstrak seperti 'comfortable' (nyaman) dan 'lightweight' (ringan) adalah kata sifat fungsional, bukan kata sifat visual. Model berbasis vision-language kesulitan menemukan representasi piksel dari kata 'nyaman'. Akibatnya, sistem hanya menebak berdasarkan bias data latihannya (mungkin mengaitkan sepatu lari acak dengan kata walking). Ini membuktikan kelemahan mendasar dari sistem ini jika tidak dikawinkan dengan metadata fungsional.")
+
+    # 7.3 Tabel perbandingan
+    add_heading(doc, '7.3 Tabel Perbandingan Karakteristik Query', level=2)
+    table_comp = doc.add_table(rows=1, cols=3)
+    table_comp.style = 'Table Grid'
+    hdr_cells = table_comp.rows[0].cells
+    hdr_cells[0].text = 'Karakteristik'
+    hdr_cells[1].text = 'Query Visual Eksplisit (Sesuai)'
+    hdr_cells[2].text = 'Query Konseptual Abstrak (Tidak Sesuai)'
+
+    row_cells = table_comp.add_row().cells
+    row_cells[0].text = 'Contoh Query'
+    row_cells[1].text = '"red running sneakers", "formal black leather shoes"'
+    row_cells[2].text = '"comfortable lightweight walking", "good quality shoes"'
+
+    row_cells = table_comp.add_row().cells
+    row_cells[0].text = 'Kesesuaian Fitur (Image-Text Align)'
+    row_cells[1].text = 'Tinggi. Warna dan bentuk mudah di-encode oleh CNN/ViT.'
+    row_cells[2].text = 'Rendah. Kenyamanan tidak bisa dilihat langsung dari piksel murni.'
+
+    row_cells = table_comp.add_row().cells
+    row_cells[0].text = 'Distribusi Hasil Top-K'
+    row_cells[1].text = 'Seragam (seluruh top 5 memiliki ciri visual yang identik secara kasat mata).'
+    row_cells[2].text = 'Acak (sepatu boots, sandal, dan sneakers bercampur).'
+
+    add_heading(doc, '8. RENCANA IMPLEMENTASI', level=1)
 
     add_heading(doc, '7.1 Tools & Library', level=2)
     doc.add_paragraph("Python, PyTorch (Torchvision), HuggingFace Sentence-Transformers, Pandas, Matplotlib, PIL (Pillow), dan Gradio (untuk UI).")
@@ -314,7 +351,7 @@ def main():
     )
 
     # --- BAB 8 ---
-    add_heading(doc, '8. ANALISIS POTENSI MASALAH', level=1)
+    add_heading(doc, '9. ANALISIS POTENSI MASALAH', level=1)
     doc.add_paragraph(
         "- Misalignment teks-gambar: Teks produk sering tidak selaras dengan foto. Sebuah gambar sepatu lari putih bisa dideskripsikan sebagai 'Running Shoes' tanpa menyebut warnanya.\n"
         "- Bias Dataset: Produk di dataset e-commerce sering kali di-shoot pada latar putih dengan pencahayaan sempurna. Jika model CLIP dipakai di domain foto in-the-wild (sepatu yang sedang dipakai berjalan di lumpur), model akan gagal atau skornya jatuh.\n"
@@ -322,7 +359,7 @@ def main():
     )
 
     # --- BAB 9 ---
-    add_heading(doc, '9. KESIMPULAN', level=1)
+    add_heading(doc, '10. KESIMPULAN', level=1)
     doc.add_paragraph(
         "Pendekatan multimodal text-to-image retrieval menggunakan model berbasis CLIP terbukti sangat mumpuni dalam memecahkan limitasi algoritma keyword-based. "
         "Sistem dapat menautkan query natural language manusia langsung ke representasi visual tanpa bergantung pada kehadiran teks deskriptif di produk tersebut. "
@@ -331,7 +368,7 @@ def main():
     )
 
     # --- BAB 10 ---
-    add_heading(doc, '10. DAFTAR PUSTAKA', level=1)
+    add_heading(doc, '11. DAFTAR PUSTAKA', level=1)
     doc.add_paragraph(
         "1. Manning, C. D., Raghavan, P., & Schütze, H. (2008). Introduction to Information Retrieval. Cambridge University Press.\n"
         "2. Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep Learning. MIT Press.\n"
